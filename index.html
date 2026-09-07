@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>팬사인회 응모 정리</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css" />
+<style>
+  :root{
+    --ink:#13131F;
+    --panel:#1C1C2C;
+    --panel-2:#22223A;
+    --paper:#F3F0E7;
+    --pink:#FF4D8D;
+    --gold:#FFC857;
+    --line: rgba(243,240,231,0.14);
+    --muted: rgba(243,240,231,0.58);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--ink);
+    color:var(--paper);
+    font-family:'Pretendard Variable', Pretendard, -apple-system, sans-serif;
+    line-height:1.6;
+  }
+  .wrap{
+    max-width:760px;
+    margin:0 auto;
+    padding:72px 24px 120px;
+  }
+
+  /* Header */
+  .eyebrow{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    color:var(--gold);
+    font-size:14px;
+    font-weight:600;
+    margin-bottom:18px;
+  }
+  .eyebrow .dot{
+    width:7px;height:7px;border-radius:50%;
+    background:var(--pink);
+    box-shadow:0 0 0 4px rgba(255,77,141,0.18);
+  }
+  h1{
+    font-family:'Unbounded', 'Pretendard Variable', sans-serif;
+    font-weight:900;
+    font-size:clamp(34px, 6vw, 52px);
+    line-height:1.12;
+    margin:0 0 14px;
+    letter-spacing:-0.01em;
+  }
+  h1 span{color:var(--pink);}
+  .lede{
+    color:var(--muted);
+    font-size:16px;
+    max-width:52ch;
+    margin:0 0 56px;
+  }
+
+  /* Month divider */
+  .month{
+    display:flex;
+    align-items:baseline;
+    gap:14px;
+    margin:56px 0 22px;
+  }
+  .month:first-of-type{margin-top:0;}
+  .month h2{
+    font-family:'Unbounded', sans-serif;
+    font-weight:700;
+    font-size:15px;
+    letter-spacing:0.04em;
+    color:var(--gold);
+    margin:0;
+  }
+  .month .rule{
+    flex:1;
+    height:1px;
+    background:repeating-linear-gradient(90deg, var(--line) 0 6px, transparent 6px 12px);
+  }
+
+  /* Ticket card */
+  .ticket{
+    display:grid;
+    grid-template-columns:118px 1px 1fr;
+    background:var(--panel);
+    border-radius:16px;
+    overflow:hidden;
+    margin-bottom:18px;
+    border:1px solid rgba(255,255,255,0.06);
+  }
+  .stub{
+    padding:22px 14px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    gap:4px;
+    background:var(--panel-2);
+  }
+  .stub .dow{
+    font-size:12px;
+    color:var(--muted);
+    font-weight:600;
+  }
+  .stub .day{
+    font-family:'Unbounded', sans-serif;
+    font-weight:900;
+    font-size:34px;
+    line-height:1;
+    color:var(--paper);
+  }
+  .stub .mon{
+    font-size:12px;
+    color:var(--pink);
+    font-weight:700;
+    margin-top:2px;
+  }
+  .perf{
+    position:relative;
+    background:
+      radial-gradient(circle 5px at 0 0, transparent 5px, var(--panel-2) 5.5px) top left / 100% 20px repeat-y,
+      var(--line);
+  }
+  .body{
+    padding:20px 24px;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+  }
+  .row-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:12px;
+  }
+  .body h3{
+    margin:0;
+    font-size:18px;
+    font-weight:700;
+  }
+  .status{
+    flex-shrink:0;
+    font-size:12px;
+    font-weight:700;
+    padding:5px 10px;
+    border-radius:999px;
+    white-space:nowrap;
+  }
+  .status.open{background:rgba(255,77,141,0.16); color:var(--pink);}
+  .status.closed{background:rgba(255,255,255,0.08); color:var(--muted);}
+  .status.done{background:rgba(255,200,87,0.16); color:var(--gold);}
+
+  .meta{
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px 16px;
+    font-size:14px;
+    color:var(--muted);
+  }
+  .meta b{color:var(--paper); font-weight:600;}
+
+  .cond{
+    font-size:14px;
+    color:var(--muted);
+    border-top:1px dashed var(--line);
+    padding-top:10px;
+    margin-top:2px;
+  }
+
+  .actions{
+    display:flex;
+    gap:8px;
+    margin-top:6px;
+  }
+  .btn{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    font-size:13px;
+    font-weight:700;
+    text-decoration:none;
+    padding:8px 14px;
+    border-radius:10px;
+  }
+  .btn.primary{
+    background:var(--pink);
+    color:var(--ink);
+  }
+  .btn.ghost{
+    background:transparent;
+    color:var(--paper);
+    border:1px solid rgba(255,255,255,0.16);
+  }
+
+  footer{
+    margin-top:64px;
+    padding-top:20px;
+    border-top:1px solid var(--line);
+    font-size:13px;
+    color:var(--muted);
+  }
+
+  @media (max-width:520px){
+    .ticket{grid-template-columns:88px 1px 1fr;}
+    .stub .day{font-size:26px;}
+    .body{padding:16px 18px;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="eyebrow"><span class="dot"></span>MY FANSIGN LIST</div>
+  <h1>팬사인회 <span>응모</span> 일정</h1>
+  <p class="lede">응모 중인 팬사인회와 예정된 이벤트를 한눈에 정리했어요. 조건과 마감일을 확인하고 놓치지 마세요.</p>
+
+  <!-- ===== 예시 데이터: 아래 티켓 블록을 복사해서 이벤트를 추가/수정하세요 ===== -->
+
+  <div class="month">
+    <h2>2026년 9월</h2>
+    <div class="rule"></div>
+  </div>
+
+  <div class="ticket">
+    <div class="stub">
+      <span class="dow">SAT</span>
+      <span class="day">12</span>
+      <span class="mon">SEP</span>
+    </div>
+    <div class="perf"></div>
+    <div class="body">
+      <div class="row-top">
+        <h3>아티스트명 정규 3집 팬사인회</h3>
+        <span class="status open">응모 중</span>
+      </div>
+      <div class="meta">
+        <span><b>장소</b> 서울 성수동 팝업스토어</span>
+        <span><b>마감</b> 9/10(목) 18:00</span>
+      </div>
+      <div class="cond">앨범 2장 구매 시 1응모 · 특전 포토카드 랜덤 · 실물 영수증 지참 필수</div>
+      <div class="actions">
+        <a class="btn primary" href="#">응모 링크</a>
+        <a class="btn ghost" href="#">공지 원문</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="ticket">
+    <div class="stub">
+      <span class="dow">SUN</span>
+      <span class="day">27</span>
+      <span class="mon">SEP</span>
+    </div>
+    <div class="perf"></div>
+    <div class="body">
+      <div class="row-top">
+        <h3>아티스트명 미니 5집 쇼케이스 + 사인회</h3>
+        <span class="status closed">마감</span>
+      </div>
+      <div class="meta">
+        <span><b>장소</b> 온라인 추첨</span>
+        <span><b>발표</b> 9/20(일)</span>
+      </div>
+      <div class="cond">선예매 통합 응모 · 당첨자 개별 문자 안내</div>
+      <div class="actions">
+        <a class="btn ghost" href="#">공지 원문</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="month">
+    <h2>2026년 10월</h2>
+    <div class="rule"></div>
+  </div>
+
+  <div class="ticket">
+    <div class="stub">
+      <span class="dow">FRI</span>
+      <span class="day">02</span>
+      <span class="mon">OCT</span>
+    </div>
+    <div class="perf"></div>
+    <div class="body">
+      <div class="row-top">
+        <h3>아티스트명 팬미팅 사인회</h3>
+        <span class="status done">참여 완료</span>
+      </div>
+      <div class="meta">
+        <span><b>장소</b> 잠실 실내체육관</span>
+        <span><b>결과</b> 당첨 · 참석 완료</span>
+      </div>
+      <div class="cond">굿즈 세트 구매 응모 · 당일 신분증 확인</div>
+      <div class="actions">
+        <a class="btn ghost" href="#">후기 보러가기</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 예시 데이터 끝 ===== -->
+
+  <footer>
+    마지막 업데이트: 2026.09.07 · 이 페이지는 GitHub Pages로 호스팅됩니다.
+  </footer>
+
+</div>
+</body>
+</html>
