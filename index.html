@@ -136,10 +136,7 @@
     <div class="form-grid">
       <div class="field"><label>제목 *</label><input id="f-title" placeholder="예: 정규 3집 팬사인회"></div>
       <div class="field"><label>유형</label>
-        <select id="f-type"><option>대면</option><option>영통</option></select>
-      </div>
-      <div class="field"><label>인원</label>
-        <select id="f-size"><option>단체</option><option>개인</option></select>
+        <select id="f-type"><option>대면+영통</option><option>단체+개인영통</option></select>
       </div>
       <div class="field"><label>음반사/앨범</label><input id="f-agency" placeholder="예: 위버스샵"></div>
       <div class="field"><label>회차</label><input id="f-round" placeholder="예: 1차"></div>
@@ -176,15 +173,9 @@
   </div>
 
   <div class="tabs" id="typeTabs">
-    <button class="tab active" data-type="전체">전체 유형</button>
-    <button class="tab" data-type="대면">대면</button>
-    <button class="tab" data-type="영통">영통</button>
-  </div>
-
-  <div class="tabs" id="sizeTabs">
-    <button class="tab active" data-size="전체">전체 인원</button>
-    <button class="tab" data-size="단체">단체</button>
-    <button class="tab" data-size="개인">개인</button>
+    <button class="tab active" data-type="전체">전체</button>
+    <button class="tab" data-type="대면+영통">대면+영통</button>
+    <button class="tab" data-type="단체+개인영통">단체+개인영통</button>
   </div>
 
   <div class="member-stats">
@@ -220,7 +211,6 @@
 
   let latestDocs = [];
   let currentType = '전체';
-  let currentSize = '전체';
   let editingId = null;
   let calDate = new Date();
 
@@ -239,15 +229,13 @@
 
   function clearForm(){
     ['f-title','f-agency','f-round','f-applyStart','f-applyEnd','f-announce','f-date','f-time','f-note'].forEach(id => document.getElementById(id).value = '');
-    document.getElementById('f-type').value = '대면';
-    document.getElementById('f-size').value = '단체';
+    document.getElementById('f-type').value = '대면+영통';
     document.getElementById('f-status').value = 'open';
   }
 
   function fillForm(d){
     document.getElementById('f-title').value = d.title || '';
-    document.getElementById('f-type').value = d.type || '대면';
-    document.getElementById('f-size').value = d.size || '단체';
+    document.getElementById('f-type').value = d.type || '대면+영통';
     document.getElementById('f-agency').value = d.agency || '';
     document.getElementById('f-round').value = d.round || '';
     document.getElementById('f-applyStart').value = d.applyStart || '';
@@ -266,7 +254,6 @@
     const payload = {
       title,
       type: document.getElementById('f-type').value,
-      size: document.getElementById('f-size').value,
       agency: document.getElementById('f-agency').value,
       round: document.getElementById('f-round').value,
       applyStart: document.getElementById('f-applyStart').value,
@@ -303,15 +290,6 @@
     renderList();
   });
 
-  document.getElementById('sizeTabs').addEventListener('click', (e) => {
-    const btn = e.target.closest('.tab');
-    if(!btn) return;
-    document.querySelectorAll('#sizeTabs .tab').forEach(t => t.classList.remove('active'));
-    btn.classList.add('active');
-    currentSize = btn.dataset.size;
-    renderList();
-  });
-
   /* ---------- 이벤트 카드 렌더링 ---------- */
   function renderEvent(doc){
     const d = doc.data();
@@ -339,7 +317,6 @@
         </div>
         <dl class="info">
           <div><dt>유형</dt><dd>${d.type || '-'}</dd></div>
-          <div><dt>인원</dt><dd>${d.size || '-'}</dd></div>
           <div><dt>음반사</dt><dd>${d.agency || '-'}</dd></div>
           <div><dt>회차</dt><dd>${d.round || '-'}</dd></div>
           <div><dt>응모기간</dt><dd>${fmt(d.applyStart)} ~ ${fmt(d.applyEnd)}</dd></div>
@@ -385,12 +362,7 @@
     list.innerHTML = '';
     let openCount = 0, restCount = 0;
 
-    const filtered = latestDocs.filter(doc => {
-      const d = doc.data();
-      const typeOk = currentType === '전체' || d.type === currentType;
-      const sizeOk = currentSize === '전체' || d.size === currentSize;
-      return typeOk && sizeOk;
-    });
+    const filtered = latestDocs.filter(doc => currentType === '전체' || doc.data().type === currentType);
     if(filtered.length === 0){
       list.innerHTML = '<div class="empty">해당하는 응모가 없어요.</div>';
     }
