@@ -8,40 +8,26 @@
 <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@600;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css" />
 
-<!-- Firebase (3명이 같이 쓰는 저장소) -->
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 
 <style>
   :root{
-    --bg:#FFFFFF;
-    --surface:#F8F7FB;
-    --border:#E8E6F0;
-    --ink:#17151F;
-    --muted:#7A7787;
-    --accent:#4F46E5;
-    --accent-soft:#EEEDFC;
-    --green:#12B76A;
-    --green-soft:#E7F8EF;
-    --red:#E5484D;
-    --gray-chip:#EDEBF3;
+    --bg:#FFFFFF; --surface:#F8F7FB; --border:#E8E6F0; --ink:#17151F; --muted:#7A7787;
+    --accent:#4F46E5; --accent-soft:#EEEDFC; --green:#12B76A; --green-soft:#E7F8EF;
+    --red:#E5484D; --gold:#C89B1E; --gray-chip:#EDEBF3;
   }
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
-  body{
-    background:var(--bg);
-    color:var(--ink);
-    font-family:'Pretendard Variable', Pretendard, -apple-system, sans-serif;
-    line-height:1.6;
-  }
-  .wrap{ max-width:820px; margin:0 auto; padding:64px 24px 120px; }
+  body{ background:var(--bg); color:var(--ink); font-family:'Pretendard Variable', Pretendard, -apple-system, sans-serif; line-height:1.6; }
+  .wrap{ max-width:860px; margin:0 auto; padding:64px 24px 120px; }
 
   .eyebrow{ display:flex; align-items:center; gap:8px; color:var(--accent); font-size:13px; font-weight:700; margin-bottom:16px; }
   .eyebrow .dot{ width:6px;height:6px;border-radius:50%; background:var(--accent); }
   h1{ font-family:'Unbounded', sans-serif; font-weight:800; font-size:clamp(30px, 5vw, 42px); margin:0 0 12px; letter-spacing:-0.01em; }
   .lede{ color:var(--muted); font-size:15px; max-width:54ch; margin:0 0 24px; }
 
-  .toprow{ display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:40px; }
+  .toprow{ display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:32px; }
   .stats{ display:flex; gap:10px; }
   .stat{ display:flex; align-items:baseline; gap:6px; background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:10px 16px; font-size:13px; color:var(--muted); font-weight:600; }
   .stat b{ font-family:'Unbounded', sans-serif; font-size:18px; color:var(--ink); font-weight:800; }
@@ -53,26 +39,52 @@
   .btn.small{ padding:6px 12px; font-size:12px; }
   .btn.danger{ background:transparent; color:var(--red); border:1px solid rgba(229,72,77,0.3); }
 
-  /* 새 응모 추가 폼 */
-  .add-panel{
-    display:none;
-    background:var(--surface);
-    border:1px solid var(--border);
-    border-radius:16px;
-    padding:24px;
-    margin-bottom:40px;
-  }
+  /* 캘린더 */
+  .calendar{ border:1px solid var(--border); border-radius:14px; padding:20px 22px; margin-bottom:32px; }
+  .cal-head{ display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; }
+  .cal-head h2{ font-size:15px; font-weight:700; margin:0; }
+  .cal-nav{ display:flex; gap:6px; }
+  .cal-nav button{ border:1px solid var(--border); background:#fff; border-radius:8px; width:28px; height:28px; cursor:pointer; font-size:13px; color:var(--ink); }
+  .cal-grid{ display:grid; grid-template-columns:repeat(7, 1fr); gap:4px; }
+  .cal-dow{ text-align:center; font-size:11px; font-weight:700; color:var(--muted); padding-bottom:6px; }
+  .cal-cell{ min-height:52px; border-radius:8px; padding:4px 5px; font-size:12px; color:var(--ink); background:var(--surface); position:relative; }
+  .cal-cell.blank{ background:transparent; }
+  .cal-cell.in-apply{ background:var(--accent-soft); }
+  .cal-cell .num{ font-weight:600; }
+  .cal-dots{ position:absolute; bottom:5px; left:5px; display:flex; gap:3px; }
+  .cal-dots i{ width:6px; height:6px; border-radius:50%; display:inline-block; }
+  .cal-legend{ display:flex; gap:16px; margin-top:12px; font-size:12px; color:var(--muted); }
+  .cal-legend span{ display:flex; align-items:center; gap:5px; }
+  .cal-legend i{ width:8px; height:8px; border-radius:50%; display:inline-block; }
+
+  .tabs{ display:flex; gap:6px; margin-bottom:28px; flex-wrap:wrap; }
+  .tab{ font-size:13px; font-weight:700; padding:8px 16px; border-radius:999px; border:1px solid var(--border); background:#fff; color:var(--muted); cursor:pointer; }
+  .tab.active{ background:var(--ink); color:#fff; border-color:var(--ink); }
+
+  .member-stats{ margin-bottom:32px; }
+  .member-stats h2{ font-size:14px; font-weight:700; margin:0 0 12px; color:var(--ink); }
+  .stat-grid{ display:grid; grid-template-columns:repeat(5, 1fr); gap:8px; }
+  .stat-item{ background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:10px 6px; text-align:center; }
+  .stat-item .name{ font-size:12px; font-weight:600; color:var(--ink); }
+  .stat-item .count{ font-family:'Unbounded', sans-serif; font-size:16px; font-weight:800; color:var(--accent); margin-top:2px; }
+  .stat-item.zero .count{ color:var(--muted); }
+
+  /* 새 응모 추가/수정 폼 */
+  .add-panel{ display:none; background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:24px; margin-bottom:32px; }
   .add-panel.open{ display:block; }
   .add-panel h2{ font-size:16px; margin:0 0 18px; }
   .form-grid{ display:grid; grid-template-columns:1fr 1fr; gap:14px 16px; }
   .form-grid .full{ grid-column:1 / -1; }
   .field label{ display:block; font-size:12px; font-weight:700; color:var(--muted); margin-bottom:6px; }
-  .field input, .field select, .field textarea{
-    width:100%; padding:10px 12px; border:1px solid var(--border); border-radius:8px;
-    font-size:14px; font-family:inherit; background:#fff; color:var(--ink);
-  }
+  .field input, .field select, .field textarea{ width:100%; padding:10px 12px; border:1px solid var(--border); border-radius:8px; font-size:14px; font-family:inherit; background:#fff; color:var(--ink); }
   .field textarea{ resize:vertical; min-height:60px; }
   .form-actions{ display:flex; gap:8px; margin-top:18px; }
+
+  .legend{ display:flex; gap:18px; font-size:13px; color:var(--muted); margin-bottom:32px; }
+  .legend span{ display:flex; align-items:center; gap:6px; }
+  .legend i{ width:12px;height:12px;border-radius:4px; display:inline-block; }
+  .legend .on i{ background:var(--green); }
+  .legend .off i{ background:var(--gray-chip); border:1px solid var(--border); }
 
   .event{ border:1px solid var(--border); border-radius:14px; margin-bottom:20px; overflow:hidden; }
   .event-head{ padding:20px 24px 18px; border-bottom:1px solid var(--border); }
@@ -85,24 +97,14 @@
   .status.closed{ background:var(--surface); color:var(--muted); }
   .status.done{ background:var(--green-soft); color:var(--green); }
 
-  .info{ display:grid; grid-template-columns:repeat(auto-fit, minmax(140px,1fr)); gap:10px 20px; font-size:13px; }
+  .info{ display:grid; grid-template-columns:repeat(auto-fit, minmax(150px,1fr)); gap:10px 20px; font-size:13px; }
   .info dt{ color:var(--muted); margin-bottom:2px; }
   .info dd{ margin:0; font-weight:600; }
 
   .members{ padding:18px 24px 22px; }
   .chips{ display:grid; grid-template-columns:repeat(5, 1fr); gap:8px; }
-  .chip{
-    text-align:center; font-size:13px; font-weight:600; padding:9px 4px; border-radius:8px;
-    background:var(--gray-chip); color:var(--muted); border:1px solid transparent;
-    cursor:pointer; user-select:none; transition:background .12s ease, color .12s ease, border-color .12s ease;
-  }
+  .chip{ text-align:center; font-size:13px; font-weight:600; padding:9px 4px; border-radius:8px; background:var(--gray-chip); color:var(--muted); border:1px solid transparent; cursor:pointer; user-select:none; transition:background .12s ease, color .12s ease, border-color .12s ease; }
   .chip.on{ background:var(--green-soft); color:var(--green); border-color:rgba(18,183,106,0.25); }
-
-  .legend{ display:flex; gap:18px; font-size:13px; color:var(--muted); margin-bottom:32px; }
-  .legend span{ display:flex; align-items:center; gap:6px; }
-  .legend i{ width:12px;height:12px;border-radius:4px; display:inline-block; }
-  .legend .on i{ background:var(--green); }
-  .legend .off i{ background:var(--gray-chip); border:1px solid var(--border); }
 
   .empty{ color:var(--muted); font-size:14px; padding:40px 0; text-align:center; }
   footer{ margin-top:56px; padding-top:20px; border-top:1px solid var(--border); font-size:13px; color:var(--muted); }
@@ -110,6 +112,7 @@
   @media (max-width:520px){
     .chips{ grid-template-columns:repeat(4, 1fr); }
     .form-grid{ grid-template-columns:1fr; }
+    .stat-grid{ grid-template-columns:repeat(4, 1fr); }
   }
 </style>
 </head>
@@ -129,17 +132,18 @@
   </div>
 
   <div class="add-panel" id="addPanel">
-    <h2>새 응모 추가</h2>
+    <h2 id="panelTitle">새 응모 추가</h2>
     <div class="form-grid">
       <div class="field"><label>제목 *</label><input id="f-title" placeholder="예: 정규 3집 팬사인회"></div>
       <div class="field"><label>유형</label>
-        <select id="f-type"><option>대면</option><option>영통</option><option>포토</option></select>
+        <select id="f-type"><option>대면+영통</option><option>단체+개인영통</option></select>
       </div>
       <div class="field"><label>음반사/앨범</label><input id="f-agency" placeholder="예: 위버스샵"></div>
       <div class="field"><label>회차</label><input id="f-round" placeholder="예: 1차"></div>
-      <div class="field"><label>응모기간</label><input id="f-apply" placeholder="예: 9/5 ~ 9/10"></div>
-      <div class="field"><label>당첨자발표</label><input id="f-announce" placeholder="예: 9/11(금)"></div>
-      <div class="field"><label>팬사인회 날짜</label><input id="f-date" placeholder="예: 9/12(토)"></div>
+      <div class="field"><label>응모 시작일</label><input type="date" id="f-applyStart"></div>
+      <div class="field"><label>응모 종료일</label><input type="date" id="f-applyEnd"></div>
+      <div class="field"><label>당첨자발표일</label><input type="date" id="f-announce"></div>
+      <div class="field"><label>팬사인회 날짜</label><input type="date" id="f-date"></div>
       <div class="field"><label>시간</label><input id="f-time" placeholder="예: 오후 3:00"></div>
       <div class="field"><label>상태</label>
         <select id="f-status"><option value="open">응모중</option><option value="closed">마감</option><option value="done">참여완료</option></select>
@@ -150,6 +154,33 @@
       <button class="btn primary" id="saveBtn">저장</button>
       <button class="btn ghost" id="cancelBtn">취소</button>
     </div>
+  </div>
+
+  <div class="calendar">
+    <div class="cal-head">
+      <h2 id="calTitle">2026년 9월</h2>
+      <div class="cal-nav">
+        <button id="calPrev">‹</button>
+        <button id="calNext">›</button>
+      </div>
+    </div>
+    <div class="cal-grid" id="calGrid"></div>
+    <div class="cal-legend">
+      <span><i style="background:var(--accent)"></i>응모기간</span>
+      <span><i style="background:var(--gold)"></i>당첨자발표</span>
+      <span><i style="background:#FF3D81"></i>팬사인회</span>
+    </div>
+  </div>
+
+  <div class="tabs" id="typeTabs">
+    <button class="tab active" data-type="전체">전체</button>
+    <button class="tab" data-type="대면+영통">대면+영통</button>
+    <button class="tab" data-type="단체+개인영통">단체+개인영통</button>
+  </div>
+
+  <div class="member-stats">
+    <h2>멤버별 참여 횟수</h2>
+    <div class="stat-grid" id="memberStatGrid"></div>
   </div>
 
   <div class="legend">
@@ -163,7 +194,6 @@
 </div>
 
 <script>
-  // ▼▼▼ 여기에 Firebase 콘솔에서 복사한 firebaseConfig를 통째로 붙여넣으세요 ▼▼▼
   const firebaseConfig = {
     apiKey: "AIzaSyAJm4x8119MbQ1iOwb4OwewmtloLIaDSvo",
     authDomain: "idntt-fansign.firebaseapp.com",
@@ -172,50 +202,95 @@
     messagingSenderId: "914863581388",
     appId: "1:914863581388:web:b7d4cfd50a15b717857a69"
   };
-  // ▲▲▲ 여기까지 ▲▲▲
 
   firebase.initializeApp(firebaseConfig);
   const db = firebase.firestore();
   const col = db.collection('events');
 
-  const MEMBERS = ["토와","김희주","조은찬","김도훈","이규혁","박누리","김은성","곽기웅","최경빈","김주호","김성준","이청명","이환희","이재영","남지운","양경호","한예준","이주헌","황은수","최태인"];
+  const MEMBERS = ["김도훈","김희주","최태인","이재영","김주호","남지운","이환희","이청명","토와","이규혁","박누리","김성준","한예준","최경빈","황은수","곽기웅","이주헌","양경호","조은찬","김은성"];
 
-  const statusLabel = { open: '응모 중', closed: '마감', done: '참여완료' };
+  let latestDocs = [];
+  let currentType = '전체';
+  let editingId = null;
+  let calDate = new Date();
 
-  // 새 응모 추가 패널 열고 닫기
+  const fmt = (s) => s ? s.replace(/^\d{4}-/, '').replace('-', '/') : '-';
+
+  /* ---------- 새 응모 추가 / 수정 패널 ---------- */
   document.getElementById('toggleAddBtn').addEventListener('click', () => {
-    document.getElementById('addPanel').classList.toggle('open');
+    editingId = null;
+    document.getElementById('panelTitle').textContent = '새 응모 추가';
+    clearForm();
+    document.getElementById('addPanel').classList.add('open');
   });
   document.getElementById('cancelBtn').addEventListener('click', () => {
     document.getElementById('addPanel').classList.remove('open');
   });
 
+  function clearForm(){
+    ['f-title','f-agency','f-round','f-applyStart','f-applyEnd','f-announce','f-date','f-time','f-note'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('f-type').value = '대면+영통';
+    document.getElementById('f-status').value = 'open';
+  }
+
+  function fillForm(d){
+    document.getElementById('f-title').value = d.title || '';
+    document.getElementById('f-type').value = d.type || '대면+영통';
+    document.getElementById('f-agency').value = d.agency || '';
+    document.getElementById('f-round').value = d.round || '';
+    document.getElementById('f-applyStart').value = d.applyStart || '';
+    document.getElementById('f-applyEnd').value = d.applyEnd || '';
+    document.getElementById('f-announce').value = d.announce || '';
+    document.getElementById('f-date').value = d.date || '';
+    document.getElementById('f-time').value = d.time || '';
+    document.getElementById('f-status').value = d.status || 'open';
+    document.getElementById('f-note').value = d.note || '';
+  }
+
   document.getElementById('saveBtn').addEventListener('click', async () => {
     const title = document.getElementById('f-title').value.trim();
     if(!title){ alert('제목을 입력해주세요'); return; }
 
-    const members = {};
-    MEMBERS.forEach(m => members[m] = false);
-
-    await col.add({
+    const payload = {
       title,
       type: document.getElementById('f-type').value,
       agency: document.getElementById('f-agency').value,
       round: document.getElementById('f-round').value,
-      apply: document.getElementById('f-apply').value,
+      applyStart: document.getElementById('f-applyStart').value,
+      applyEnd: document.getElementById('f-applyEnd').value,
       announce: document.getElementById('f-announce').value,
       date: document.getElementById('f-date').value,
       time: document.getElementById('f-time').value,
       status: document.getElementById('f-status').value,
-      note: document.getElementById('f-note').value,
-      members,
-      createdAt: firebase.firestore.FieldValue.serverTimestamp()
-    });
+      note: document.getElementById('f-note').value
+    };
 
-    ['f-title','f-agency','f-round','f-apply','f-announce','f-date','f-time','f-note'].forEach(id => document.getElementById(id).value = '');
+    if(editingId){
+      await col.doc(editingId).update(payload);
+    } else {
+      const members = {};
+      MEMBERS.forEach(m => members[m] = false);
+      payload.members = members;
+      payload.createdAt = firebase.firestore.FieldValue.serverTimestamp();
+      await col.add(payload);
+    }
+
+    editingId = null;
+    clearForm();
     document.getElementById('addPanel').classList.remove('open');
   });
 
+  /* ---------- 유형 필터 탭 ---------- */
+  document.getElementById('typeTabs').addEventListener('click', (e) => {
+    const btn = e.target.closest('.tab');
+    if(!btn) return;
+    document.querySelectorAll('#typeTabs .tab').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+    currentType = btn.dataset.type;
+    renderList();
+  });
+
+  /* ---------- 이벤트 카드 렌더링 ---------- */
   function renderEvent(doc){
     const d = doc.data();
     const el = document.createElement('div');
@@ -236,6 +311,7 @@
               <option value="closed" ${d.status==='closed'?'selected':''}>마감</option>
               <option value="done" ${d.status==='done'?'selected':''}>참여완료</option>
             </select>
+            <button class="btn small ghost" data-role="edit">수정</button>
             <button class="btn small danger" data-role="delete">삭제</button>
           </div>
         </div>
@@ -243,9 +319,9 @@
           <div><dt>유형</dt><dd>${d.type || '-'}</dd></div>
           <div><dt>음반사</dt><dd>${d.agency || '-'}</dd></div>
           <div><dt>회차</dt><dd>${d.round || '-'}</dd></div>
-          <div><dt>응모기간</dt><dd>${d.apply || '-'}</dd></div>
-          <div><dt>당첨자발표</dt><dd>${d.announce || '-'}</dd></div>
-          <div><dt>팬사인회 날짜</dt><dd>${d.date || '-'} ${d.time || ''}</dd></div>
+          <div><dt>응모기간</dt><dd>${fmt(d.applyStart)} ~ ${fmt(d.applyEnd)}</dd></div>
+          <div><dt>당첨자발표</dt><dd>${fmt(d.announce)}</dd></div>
+          <div><dt>팬사인회 날짜</dt><dd>${fmt(d.date)} ${d.time || ''}</dd></div>
         </dl>
         ${d.note ? `<div style="margin-top:10px;font-size:13px;color:var(--muted)">${d.note}</div>` : ''}
       </div>
@@ -254,17 +330,22 @@
       </div>
     `;
 
-    // 상태 변경
     el.querySelector('[data-role="status"]').addEventListener('change', (e) => {
       col.doc(doc.id).update({ status: e.target.value });
     });
 
-    // 삭제
     el.querySelector('[data-role="delete"]').addEventListener('click', () => {
       if(confirm('이 응모 기록을 삭제할까요?')) col.doc(doc.id).delete();
     });
 
-    // 멤버 참여 토글
+    el.querySelector('[data-role="edit"]').addEventListener('click', () => {
+      editingId = doc.id;
+      document.getElementById('panelTitle').textContent = '응모 수정';
+      fillForm(d);
+      document.getElementById('addPanel').classList.add('open');
+      window.scrollTo({ top: document.getElementById('addPanel').offsetTop - 20, behavior:'smooth' });
+    });
+
     el.querySelectorAll('.chip').forEach(chip => {
       chip.addEventListener('click', () => {
         const member = chip.dataset.member;
@@ -276,24 +357,96 @@
     return el;
   }
 
-  // 실시간 반영
-  col.orderBy('createdAt', 'desc').onSnapshot(snapshot => {
+  function renderList(){
     const list = document.getElementById('eventList');
     list.innerHTML = '';
     let openCount = 0, restCount = 0;
 
-    if(snapshot.empty){
-      list.innerHTML = '<div class="empty">아직 등록된 응모가 없어요. 위의 "＋ 새 응모 추가" 버튼으로 시작해보세요.</div>';
+    const filtered = latestDocs.filter(doc => currentType === '전체' || doc.data().type === currentType);
+    if(filtered.length === 0){
+      list.innerHTML = '<div class="empty">해당하는 응모가 없어요.</div>';
     }
+    filtered.forEach(doc => list.appendChild(renderEvent(doc)));
 
-    snapshot.forEach(doc => {
-      list.appendChild(renderEvent(doc));
+    latestDocs.forEach(doc => {
       const s = doc.data().status;
       if(s === 'open') openCount++; else restCount++;
     });
-
     document.getElementById('countOpen').textContent = openCount;
     document.getElementById('countClosed').textContent = restCount;
+  }
+
+  function renderMemberStats(){
+    const counts = {};
+    MEMBERS.forEach(m => counts[m] = 0);
+    latestDocs.forEach(doc => {
+      const members = doc.data().members || {};
+      MEMBERS.forEach(m => { if(members[m]) counts[m]++; });
+    });
+    const grid = document.getElementById('memberStatGrid');
+    grid.innerHTML = MEMBERS.map(m => `
+      <div class="stat-item ${counts[m] === 0 ? 'zero' : ''}">
+        <div class="name">${m}</div>
+        <div class="count">${counts[m]}회</div>
+      </div>
+    `).join('');
+  }
+
+  /* ---------- 캘린더 ---------- */
+  function pad(n){ return String(n).padStart(2,'0'); }
+  function toKey(y,m,d){ return `${y}-${pad(m+1)}-${pad(d)}`; }
+
+  function renderCalendar(){
+    const y = calDate.getFullYear(), m = calDate.getMonth();
+    document.getElementById('calTitle').textContent = `${y}년 ${m+1}월`;
+
+    const firstDow = new Date(y, m, 1).getDay();
+    const lastDate = new Date(y, m+1, 0).getDate();
+    const dows = ['일','월','화','수','목','금','토'];
+
+    let html = dows.map(d => `<div class="cal-dow">${d}</div>`).join('');
+    for(let i=0;i<firstDow;i++) html += `<div class="cal-cell blank"></div>`;
+
+    for(let day=1; day<=lastDate; day++){
+      const key = toKey(y, m, day);
+      let inApply = false, hasAnnounce = false, hasEvent = false;
+      const titles = [];
+
+      latestDocs.forEach(doc => {
+        const d = doc.data();
+        if(d.applyStart && d.applyEnd && key >= d.applyStart && key <= d.applyEnd){ inApply = true; titles.push('응모: '+d.title); }
+        if(d.announce === key){ hasAnnounce = true; titles.push('발표: '+d.title); }
+        if(d.date === key){ hasEvent = true; titles.push('팬사인회: '+d.title); }
+      });
+
+      let dots = '';
+      if(hasAnnounce) dots += `<i style="background:var(--gold)"></i>`;
+      if(hasEvent) dots += `<i style="background:#FF3D81"></i>`;
+
+      html += `<div class="cal-cell ${inApply ? 'in-apply' : ''}" title="${titles.join('\\n')}">
+        <div class="num">${day}</div>
+        <div class="cal-dots">${dots}</div>
+      </div>`;
+    }
+
+    document.getElementById('calGrid').innerHTML = html;
+  }
+
+  document.getElementById('calPrev').addEventListener('click', () => {
+    calDate.setMonth(calDate.getMonth() - 1);
+    renderCalendar();
+  });
+  document.getElementById('calNext').addEventListener('click', () => {
+    calDate.setMonth(calDate.getMonth() + 1);
+    renderCalendar();
+  });
+
+  /* ---------- 실시간 반영 ---------- */
+  col.orderBy('createdAt', 'desc').onSnapshot(snapshot => {
+    latestDocs = snapshot.docs;
+    renderList();
+    renderMemberStats();
+    renderCalendar();
   }, err => {
     document.getElementById('eventList').innerHTML =
       '<div class="empty">연결에 실패했어요. firebaseConfig 값을 다시 확인해주세요.<br>(' + err.message + ')</div>';
