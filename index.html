@@ -98,6 +98,13 @@
   }
   .chip.on{ background:var(--green-soft); color:var(--green); border-color:rgba(18,183,106,0.25); }
 
+  .tabs{ display:flex; gap:6px; margin-bottom:28px; flex-wrap:wrap; }
+  .tab{
+    font-size:13px; font-weight:700; padding:8px 16px; border-radius:999px;
+    border:1px solid var(--border); background:#fff; color:var(--muted); cursor:pointer;
+  }
+  .tab.active{ background:var(--ink); color:#fff; border-color:var(--ink); }
+
   .legend{ display:flex; gap:18px; font-size:13px; color:var(--muted); margin-bottom:32px; }
   .legend span{ display:flex; align-items:center; gap:6px; }
   .legend i{ width:12px;height:12px;border-radius:4px; display:inline-block; }
@@ -152,6 +159,13 @@
     </div>
   </div>
 
+  <div class="tabs" id="typeTabs">
+    <button class="tab active" data-type="전체">전체 유형</button>
+    <button class="tab" data-type="대면">대면</button>
+    <button class="tab" data-type="영통">영통</button>
+    <button class="tab" data-type="포토">포토</button>
+  </div>
+
   <div class="legend">
     <span class="on"><i></i>참여</span>
     <span class="off"><i></i>불참여</span>
@@ -178,7 +192,7 @@
   const db = firebase.firestore();
   const col = db.collection('events');
 
-  const MEMBERS = ["토와","김희주","조은찬","김도훈","이규혁","박누리","김은성","곽기웅","최경빈","김주호","김성준","이청명","이환희","이재영","남지운","양경호","한예준","이주헌","황은수","최태인"];
+  const MEMBERS = ["김도훈","김희주","최태인","이재영","김주호","남지운","이환희","이청명","토와","이규혁","박누리","김성준","한예준","최경빈","황은수","곽기웅","이주헌","양경호","조은찬","김은성"];
 
   const statusLabel = { open: '응모 중', closed: '마감', done: '참여완료' };
 
@@ -276,24 +290,44 @@
     return el;
   }
 
-  // 실시간 반영
-  col.orderBy('createdAt', 'desc').onSnapshot(snapshot => {
+  // 유형 필터 탭
+  let currentType = '전체';
+  let latestDocs = [];
+
+  document.getElementById('typeTabs').addEventListener('click', (e) => {
+    const btn = e.target.closest('.tab');
+    if(!btn) return;
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+    currentType = btn.dataset.type;
+    renderList();
+  });
+
+  function renderList(){
     const list = document.getElementById('eventList');
     list.innerHTML = '';
     let openCount = 0, restCount = 0;
 
-    if(snapshot.empty){
-      list.innerHTML = '<div class="empty">아직 등록된 응모가 없어요. 위의 "＋ 새 응모 추가" 버튼으로 시작해보세요.</div>';
+    const filtered = latestDocs.filter(doc => currentType === '전체' || doc.data().type === currentType);
+
+    if(filtered.length === 0){
+      list.innerHTML = '<div class="empty">해당하는 응모가 없어요.</div>';
     }
 
-    snapshot.forEach(doc => {
-      list.appendChild(renderEvent(doc));
+    filtered.forEach(doc => list.appendChild(renderEvent(doc)));
+
+    latestDocs.forEach(doc => {
       const s = doc.data().status;
       if(s === 'open') openCount++; else restCount++;
     });
-
     document.getElementById('countOpen').textContent = openCount;
     document.getElementById('countClosed').textContent = restCount;
+  }
+
+  // 실시간 반영
+  col.orderBy('createdAt', 'desc').onSnapshot(snapshot => {
+    latestDocs = snapshot.docs;
+    renderList();
   }, err => {
     document.getElementById('eventList').innerHTML =
       '<div class="empty">연결에 실패했어요. firebaseConfig 값을 다시 확인해주세요.<br>(' + err.message + ')</div>';
