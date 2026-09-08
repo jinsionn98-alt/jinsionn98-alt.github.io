@@ -105,6 +105,17 @@
   }
   .tab.active{ background:var(--ink); color:#fff; border-color:var(--ink); }
 
+  .member-stats{ margin-bottom:32px; }
+  .member-stats h2{ font-size:14px; font-weight:700; margin:0 0 12px; color:var(--ink); }
+  .stat-grid{ display:grid; grid-template-columns:repeat(5, 1fr); gap:8px; }
+  .stat-item{
+    background:var(--surface); border:1px solid var(--border); border-radius:10px;
+    padding:10px 6px; text-align:center;
+  }
+  .stat-item .name{ font-size:12px; font-weight:600; color:var(--ink); }
+  .stat-item .count{ font-family:'Unbounded', sans-serif; font-size:16px; font-weight:800; color:var(--accent); margin-top:2px; }
+  .stat-item.zero .count{ color:var(--muted); }
+
   .legend{ display:flex; gap:18px; font-size:13px; color:var(--muted); margin-bottom:32px; }
   .legend span{ display:flex; align-items:center; gap:6px; }
   .legend i{ width:12px;height:12px;border-radius:4px; display:inline-block; }
@@ -164,6 +175,11 @@
     <button class="tab" data-type="대면">대면</button>
     <button class="tab" data-type="영통">영통</button>
     <button class="tab" data-type="포토">포토</button>
+  </div>
+
+  <div class="member-stats">
+    <h2>멤버별 참여 횟수</h2>
+    <div class="stat-grid" id="memberStatGrid"></div>
   </div>
 
   <div class="legend">
@@ -324,10 +340,28 @@
     document.getElementById('countClosed').textContent = restCount;
   }
 
+  function renderMemberStats(){
+    const counts = {};
+    MEMBERS.forEach(m => counts[m] = 0);
+    latestDocs.forEach(doc => {
+      const members = doc.data().members || {};
+      MEMBERS.forEach(m => { if(members[m]) counts[m]++; });
+    });
+
+    const grid = document.getElementById('memberStatGrid');
+    grid.innerHTML = MEMBERS.map(m => `
+      <div class="stat-item ${counts[m] === 0 ? 'zero' : ''}">
+        <div class="name">${m}</div>
+        <div class="count">${counts[m]}회</div>
+      </div>
+    `).join('');
+  }
+
   // 실시간 반영
   col.orderBy('createdAt', 'desc').onSnapshot(snapshot => {
     latestDocs = snapshot.docs;
     renderList();
+    renderMemberStats();
   }, err => {
     document.getElementById('eventList').innerHTML =
       '<div class="empty">연결에 실패했어요. firebaseConfig 값을 다시 확인해주세요.<br>(' + err.message + ')</div>';
