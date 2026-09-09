@@ -441,9 +441,25 @@
     renderCalendar();
   });
 
+  function todayStr(){
+    const t = new Date();
+    return `${t.getFullYear()}-${pad(t.getMonth()+1)}-${pad(t.getDate())}`;
+  }
+
+  function checkAutoClose(){
+    const today = todayStr();
+    latestDocs.forEach(doc => {
+      const d = doc.data();
+      if(d.status === 'open' && d.applyEnd && d.applyEnd < today){
+        col.doc(doc.id).update({ status: 'closed' });
+      }
+    });
+  }
+
   /* ---------- 실시간 반영 ---------- */
-  col.orderBy('createdAt', 'desc').onSnapshot(snapshot => {
+  col.orderBy('announce', 'desc').onSnapshot(snapshot => {
     latestDocs = snapshot.docs;
+    checkAutoClose();
     renderList();
     renderMemberStats();
     renderCalendar();
